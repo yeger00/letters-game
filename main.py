@@ -106,17 +106,22 @@ async def check_answer(
             {"request": request, "progress": new_progress}
         )
 
-        correct_message_html = "<div class='text-green-500'>Correct!</div>"
+        answered_button_html = templates.get_template(
+            "partials/answered_quiz_button.html"
+        ).render({"request": request, "letter_char": letter, "is_correct": True})
 
         next_button_html = templates.get_template("partials/next_button.html").render(
             {"request": request, "progress": new_progress}
         )
 
         html = f"""
-        {correct_message_html}
+        {answered_button_html}
         <div id="progress-container" hx-swap-oob="true">{progress_bar_html}</div>
         <div id="next-question-button-container" hx-swap-oob="true">{next_button_html}</div>
         """
         return HTMLResponse(content=html)
     else:
-        return HTMLResponse("<div class='text-red-500'>Try again!</div>") 
+        answered_button_html = templates.get_template(
+            "partials/answered_quiz_button.html"
+        ).render({"request": request, "letter_char": letter, "is_correct": False})
+        return HTMLResponse(content=answered_button_html) 
