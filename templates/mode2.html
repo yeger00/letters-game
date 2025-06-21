@@ -1,0 +1,25 @@
+<div id="quiz-container" class="p-8 bg-white rounded-lg shadow-lg text-center">
+    <h2 class="text-2xl font-bold mb-4">Which letter is this?</h2>
+    <audio id="letter-sound" src="/static/{{ correct_letter.sound }}" preload="auto"></audio>
+    <div class="grid grid-cols-2 gap-4 mt-8">
+        {% for letter in letters %}
+        <button hx-post="/check_answer"
+                hx-target="#quiz-result"
+                hx-vals='{"letter": "{{ letter.letter }}", "correct_letter": "{{ correct_letter.letter }}", "progress": "{{ progress }}"}'
+                class="bg-gray-200 hover:bg-gray-300 text-6xl font-bold p-8 rounded-lg"
+                onclick="document.getElementById('sound-{{ loop.index }}').play()">
+            {{ letter.letter }}
+        </button>
+        <audio id="sound-{{ loop.index }}" src="/static/{{ letter.sound }}" preload="auto" class="hidden"></audio>
+        {% endfor %}
+    </div>
+    <div id="quiz-result" class="mt-8 text-2xl font-bold"></div>
+    <div id="next-question-button-container">
+        <button hx-get="/mode2?progress={{ progress }}" hx-target="#game-container" class="mt-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+            Next Question
+        </button>
+    </div>
+</div>
+<script>
+    document.getElementById('letter-sound').play();
+</script> 
