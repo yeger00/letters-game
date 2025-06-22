@@ -98,6 +98,7 @@ async def check_answer(
     letter: str = Form(...),
     correct_letter: str = Form(...),
     progress: int = Form(...),
+    loop_index: int = Form(...),
 ):
     if letter == correct_letter:
         new_progress = progress + 1
@@ -108,7 +109,14 @@ async def check_answer(
 
         answered_button_html = templates.get_template(
             "partials/answered_quiz_button.html"
-        ).render({"request": request, "letter_char": letter, "is_correct": True})
+        ).render(
+            {
+                "request": request,
+                "letter_char": letter,
+                "is_correct": True,
+                "loop_index": loop_index,
+            }
+        )
 
         next_button_html = templates.get_template("partials/next_button.html").render(
             {"request": request, "progress": new_progress}
@@ -123,5 +131,12 @@ async def check_answer(
     else:
         answered_button_html = templates.get_template(
             "partials/answered_quiz_button.html"
-        ).render({"request": request, "letter_char": letter, "is_correct": False})
+        ).render(
+            {
+                "request": request,
+                "letter_char": letter,
+                "is_correct": False,
+                "loop_index": loop_index,
+            }
+        )
         return HTMLResponse(content=answered_button_html) 

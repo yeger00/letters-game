@@ -6,7 +6,7 @@
         <button hx-post="/check_answer"
                 hx-target="this"
                 hx-swap="outerHTML"
-                hx-vals='{"letter": "{{ letter.letter }}", "correct_letter": "{{ correct_letter.letter }}", "progress": "{{ progress }}"}'
+                hx-vals='{"letter": "{{ letter.letter }}", "correct_letter": "{{ correct_letter.letter }}", "progress": "{{ progress }}", "loop_index": "{{ loop.index }}"}'
                 class="bg-gray-200 hover:bg-gray-300 text-6xl font-bold p-8 rounded-lg"
                 onclick="document.getElementById('sound-{{ loop.index }}').play()">
             {{ letter.letter }}

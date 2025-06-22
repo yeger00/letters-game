@@ -1,15 +1,30 @@
 {% if progress >= 10 %}
-<div class="text-center">
+<div id="fireworks-container" class="fixed inset-0 z-50 pointer-events-none"></div>
+<div class="text-center relative z-10">
     <div class="text-2xl font-bold text-green-500">You did it!</div>
     <div class="text-5xl mt-4">🎉</div>
-    <button hx-get="/mode2" hx-target="#game-container" hx-swap="innerHTML"
-            hx-include="[name='progress']" hx-vals='{"progress": 0}'
+    <button id="play-again-btn" hx-get="/mode2" hx-target="#game-container" hx-swap="innerHTML"
+            hx-vals='{"progress": 0}'
             class="mt-8 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
         Play Again
     </button>
 </div>
+<script>
+    const container = document.getElementById('fireworks-container');
+    if (container) {
+        const fireworks = new Fireworks.default(container);
+        fireworks.start();
+
+        document.body.addEventListener('htmx:beforeRequest', function(event) {
+            if (event.detail.elt.id === 'play-again-btn') {
+                fireworks.stop();
+                container.remove();
+            }
+        }, { once: true });
+    }
+</script>
 {% else %}
-<div class="h-full w-4 bg-gray-300 rounded-full relative mx-auto">
+<div class="h-full w-4 mr-8 mt-4 bg-gray-300 rounded-full relative mx-auto">
     <div id="progress-bar" class="w-4 bg-green-400 rounded-full absolute bottom-0" style="height: {{ progress * 10 }}%;"></div>
     <div id="dragon" class="absolute left-1/2 transform -translate-x-1/2 w-16 h-16" style="bottom: {{ progress * 10 - 5 }}%; transition: bottom 0.5s ease-in-out;">
         <!-- Dragon SVG -->
